@@ -15,7 +15,6 @@ def main():
     if not link: quit()
     movie_info = imdb_get_all_info(link)
     line_width = 150
-    print(movie_info)
     print('\n' + '=' * line_width)
     print (movie_info['title'].ljust(line_width//3) + movie_info['type'].center(line_width//3) + str(movie_info['date']['Y']).rjust(line_width//3))
     print (("IMDB Rating: " + movie_info['rating']).ljust(line_width//4) + movie_info['parental_rating'].center(line_width//4) +
@@ -101,7 +100,6 @@ def imdb_get_all_info(link, movie_dict={}):
 
 def imdb_get_title(imdb_soup):
     title = imdb_soup.find('h1', {"data-testid":"hero-title-block__title"})
-    print(title.text.strip())
     return None if not title else title.text.strip()
 
 
@@ -110,7 +108,6 @@ def imdb_get_parental_rating(imdb_soup):
     if len(subtext) < 2:
         return 'None'
     subtext = subtext[1]
-    print(subtext.text.strip())
     return 'None' if not subtext else subtext.text.strip()
 
 
@@ -129,7 +126,6 @@ def imdb_get_date(imdb_soup):
     links = imdb_soup.findAll('a', {"class": "ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link"})
     for link in links:
         if dateRegex.search(link.text):
-            print(convert_date(dateRegex.search(link.text).group()))
             return convert_date(dateRegex.search(link.text).group())
     return None
 
@@ -139,13 +135,11 @@ def imdb_get_genres(imdb_soup):
     texts = imdb_soup.findAll('a', {"class": "LKJMs"})
     for text in texts:
         genres.append(text.text.strip())
-    print(genres)
     return None if len(genres) == 0 else genres
 
 
 def imdb_get_rating(imdb_soup):
     rating_value = imdb_soup.find('span', {"class": "iTLWoV"})
-    print(rating_value.text.strip())
     return None if not rating_value else rating_value.text.strip()
 
 
@@ -153,13 +147,11 @@ def imdb_get_summary(imdb_soup):
     summary_text = imdb_soup.find('span', {"data-testid":"plot-xl"})
     return None if not summary_text else summary_text.text.strip()
 
-
 def imdb_get_runtime(imdb_soup):
     rtRegex = re.compile(r'''(\d+h )?\d+m''')
     lis = imdb_soup.findAll('li', {"class": "ipc-inline-list__item"})
     for li in lis:
         if rtRegex.search(li.text):
-            print(rtRegex.search(li.text).group())
             return rtRegex.search(li.text).group()
     return None
 
@@ -176,7 +168,6 @@ def imdb_get_type(imdb_soup):
                 type += " " + li.text.strip()
             else:
                 type = li.text.strip()
-    print(type)
     return type
 
 
